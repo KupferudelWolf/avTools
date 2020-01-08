@@ -35,6 +35,11 @@ export function animate(draw, fpsTarget) {
 
 ///
 
+/**
+ * Loads a JSON file through XMLHttpRequest.
+ * @param {String} url - Path to JSON file.
+ * @param {function} callback - Function to run when the JSON is loaded.
+ */
 export function loadJSON(url, callback) {
   let json = new XMLHttpRequest();
   json.overrideMimeType("application/json");
