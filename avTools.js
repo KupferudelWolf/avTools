@@ -34,6 +34,21 @@ export function animate(draw, fpsTarget) {
 
 ///
 
+export function loadJSON(url, callback) {
+  let json = new XMLHttpRequest();
+  json.overrideMimeType("application/json");
+  json.open('GET', url, true);
+  json.onreadystatechange = function () {
+    if (json.readyState == 4 && json.status == "200") {
+      callback(json.responseText);
+      json.abort();
+    }
+  };
+  json.send(null);
+};
+
+///
+
 /**
  * Converts straight quotes to curly quotes.
  * @param {String} txt - String to "quotify".
