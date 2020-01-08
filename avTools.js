@@ -1,8 +1,34 @@
-/** @overview Generic tools for personal use.
+/**
+ * @overview Generic tools for personal use.
  * @author Avoyt
  * @date 2020 January 3
  * @module AV
  */
+
+///
+
+export const GOLDEN_RATIO = 1.61803398875;
+
+/**
+ * Runs a function every set number of frames.
+ * @param {function} draw - Function to run.
+ * @param {number} [fpsTarget] - Frame rate (in fps).
+ */
+export function animate(draw, fpsTarget) {
+
+  let delta, now,
+      then = Date.now(),
+      interval = 1000 / (fpsTarget || 1000),
+      tick = function () {
+        requestAnimationFrame(tick);
+        if ((delta = (now = Date.now()) - then) >= interval) {
+          then = now - (delta % interval);
+          draw();
+        }
+      };
+
+  tick();
+};
 
 ///
 
@@ -26,7 +52,7 @@ export function defined(v) {
 /**
  * Determines if a variable matches a certain type.
  * @param {*} v - Variable to test.
- * @param {string} [type] - The exact type of variable to match.
+ * @param {String} [type] - The exact type of variable to match.
  */
 export function valid(v, type) {
   if (typeof(type) === 'string') return typeof(v) === type;
@@ -70,7 +96,7 @@ export function swap(array, a, b) {
  */
 export function average() {
   let args = [];
-  for (var i = 0; i < arguments.length; i++) args.push(arguments[i]);
+  for (let i = 0; i < arguments.length; i++) args.push(arguments[i]);
   return args.reduce((acc, val) => acc + val) / args.length;
 }
 /**
@@ -81,7 +107,7 @@ export function average() {
  */
 export function mid() {
   let args = [], sum, l, ave, closest;
-  for (var i = 0; i < arguments.length; i++) args.push(arguments[i]);
+  for (let i = 0; i < arguments.length; i++) args.push(arguments[i]);
   l = args.length;
   ave = average(...args);
   closest = args[0];
@@ -92,6 +118,18 @@ export function mid() {
     if (dist < Math.abs(ave - closest)) closest = val;
   };
   return closest;
+}
+/**
+ * Returns x rounded to the nearest y.
+ * @summary Linearly maps a number from one scale to another.
+ * @param {number} x - Number to round.
+ * @param {number} [y] - Number to round to.
+ * @param {number} [f] - Math function to use. Defaults to 'floor'.
+ */
+export function round(x, y, f) {
+  y = y || 1;
+  if (!f || !Math[f]) f = 'floor';
+  return Math[f](x / y) * y;
 }
 /**
  * Returns a value linearly mapped from one line or scale to another.
@@ -319,7 +357,7 @@ export class Color {
 
 /*
 function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),

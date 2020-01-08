@@ -1,56 +1,68 @@
 export default class CtxTools {
-  constructor(ctx) {
-    let funcTextWrap = function (ctx, str, x, y, width, prop, func) {
-      let thisLine, firstLine = true;
-      if (typeof(width) === 'undefined') {
-        ctx[func](str, x, y);
-        return;
-      }
-      width = Math.abs(width);
-
-      prop = prop || {};
-      if (typeof(prop.leading) === 'undefined') {
-        prop.leading = parseInt(ctx.font);
-      }
-      if (typeof(prop.para_after) === 'undefined') {
-        prop.para_after = prop.leading;
-      }
-      if (typeof(prop.para_indent) === 'undefined') {
-        prop.para_indent = 0;
-      }
-
-      str.replace(/[\n\r]/g,' \r ').split(' ').forEach((word) => {
-        let xOff = 0;
-        if (firstLine) xOff = prop.para_indent;
-        if (word !== '\r' && ctx.measureText(thisLine + ' ' + word).width < width - xOff) {
-          // This word fits on the line.
-          if (thisLine) {
-            thisLine += ' ' + word;
-          } else {
-            thisLine = word;
+  constructor (ctx) {
+    let poly = function (vectors) {
+          ctx.beginPath();
+          let xK = '0', yK = '1';
+          if (typeof(vectors[0].x) !== 'undefined') {
+            xK = 'x';
+            yK = 'y';
           }
-        } else {
-          // This word does not fit on the line.
-          if (thisLine) {
-            ctx[func](thisLine, x + xOff, y);
-            if (word === '\r') {
-              y += prop.para_after;
-              firstLine = true;
+          $.each(vectors, (index, value) => {
+            ctx.lineTo(value[xK], value[yK]);
+          });
+          ctx.closePath();
+        },
+        funcTextWrap = function (ctx, str, x, y, width, prop, func) {
+          let thisLine, firstLine = true;
+          if (typeof(width) === 'undefined') {
+            ctx[func](str, x, y);
+            return;
+          }
+          width = Math.abs(width);
+
+          prop = prop || {};
+          if (typeof(prop.leading) === 'undefined') {
+            prop.leading = parseInt(ctx.font);
+          }
+          if (typeof(prop.para_after) === 'undefined') {
+            prop.para_after = prop.leading;
+          }
+          if (typeof(prop.para_indent) === 'undefined') {
+            prop.para_indent = 0;
+          }
+
+          str.replace(/[\n\r]/g,' \r ').split(' ').forEach((word) => {
+            let xOff = 0;
+            if (firstLine) xOff = prop.para_indent;
+            if (word !== '\r' && ctx.measureText(thisLine + ' ' + word).width < width - xOff) {
+              // This word fits on the line.
+              if (thisLine) {
+                thisLine += ' ' + word;
+              } else {
+                thisLine = word;
+              }
             } else {
-              y += prop.leading;
-              firstLine = false;
+              // This word does not fit on the line.
+              if (thisLine) {
+                ctx[func](thisLine, x + xOff, y);
+                if (word === '\r') {
+                  y += prop.para_after;
+                  firstLine = true;
+                } else {
+                  y += prop.leading;
+                  firstLine = false;
+                }
+              }
+              thisLine = word;
+              if (word === '\r') thisLine = null;
             }
+          });
+          if (thisLine) {
+            ctx[func](thisLine, x, y);
+            y += prop.leading;
           }
-          thisLine = word;
-          if (word === '\r') thisLine = null;
-        }
-      });
-      if (thisLine) {
-        ctx[func](thisLine, x, y);
-        y += prop.leading;
-      }
-      return y;
-    };
+          return y;
+        };
 
     this.func = {
       fillPixel: function (x, y, color) {
@@ -89,6 +101,14 @@ export default class CtxTools {
           this.lineTo(xx, yy);
         }
         this.closePath();
+        this.fill();
+      },
+      strokePoly: function (vectors) {
+        poly(vectors);
+        this.stroke();
+      },
+      fillPoly: function (vectors) {
+        poly(vectors);
         this.fill();
       },
       graph: function (x, y, length, func) {
