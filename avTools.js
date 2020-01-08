@@ -5,6 +5,10 @@
  * @module AV
  */
 
+/// Constants
+
+export const GOLDEN_RATIO = 1.61803398875;
+
 ///
 
 export const GOLDEN_RATIO = 1.61803398875;
