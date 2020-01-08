@@ -7,6 +7,7 @@
 
 /// Constants
 
+export const RADIAN = Math.PI * 2;
 export const GOLDEN_RATIO = 1.61803398875;
 
 ///
