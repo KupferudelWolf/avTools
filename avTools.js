@@ -188,12 +188,20 @@ export function randomFromArray(array) {
 
 export class Color {
   constructor (r, g, b, a) {
-    if (typeof(r) === 'object') {
+    if (r instanceof Color) {
       let obj = r;
-      r = obj.r;
-      g = obj.g;
-      b = obj.b;
-      if (obj.a) a = obj.a;
+      r = obj.red;
+      g = obj.green;
+      b = obj.blue;
+      if (obj.alpha) a = obj.alpha;
+    } else if (typeof(r) === 'object') {
+      let obj = r;
+      if (valid(obj.r)) {
+        r = obj.r;
+        g = obj.g;
+        b = obj.b;
+        if (obj.a) a = obj.a;
+      }
     }
     if (typeof(r) === 'string') {
       let mode, str = r.trim().replace(/,\s*/g,' '),
@@ -315,14 +323,12 @@ export class Color {
           break;
       }
     } else {
-      /*
-      if (r <= 1 && g <= 1 && b <= 1 && (typeof(a) === 'undefined' || a <= 1)) {
+      if (r+g+b > 0 && r <= 1 && g <= 1 && b <= 1 && (typeof(a) === 'undefined' || a <= 1)) {
         r *= 255;
         g *= 255;
         b *= 255;
         if (typeof(a) !== 'undefined') a *= 255;
       }
-      */
     }
 
     if (typeof(a) === 'undefined') a = 255;
@@ -368,18 +374,19 @@ export class Color {
         this.rgba[channel] = this.rgba[channel] * mult + add;
       }
     }
+    return this;
   }
   add(x) {
-    this.math(1,x);
+    return this.math(1,x);
   }
   sub(x) {
-    this.math(1,-x);
+    return this.math(1,-x);
   }
   mult(x) {
-    this.math(x);
+    return this.math(x);
   }
   div(x) {
-    this.math(1/x);
+    return this.math(1/x);
   }
 
 }
@@ -423,8 +430,9 @@ export class Point {
    * @param {number} dist - Distance to move the point.
    */
   applyAngle(ang, dist) {
-    this.x += dist * Math.cos(ang),
-    this.y += dist * Math.sin(ang)
+    this.x += dist * Math.cos(ang);
+    this.y += dist * Math.sin(ang);
+    return this;
   }
   /**
    * Returns the distance between this Point and another Cartesian point.
