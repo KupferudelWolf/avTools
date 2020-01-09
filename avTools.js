@@ -188,6 +188,13 @@ export function randomFromArray(array) {
 
 export class Color {
   constructor (r, g, b, a) {
+    if (typeof(r) === 'object') {
+      let obj = r;
+      r = obj.r;
+      g = obj.g;
+      b = obj.b;
+      if (obj.a) a = obj.a;
+    }
     if (typeof(r) === 'string') {
       let mode, str = r.trim().replace(/,\s*/g,' '),
           regRGBorHSL = new RegExp('(rgba?|hs[blv]a?)\\(|\\)','g');
@@ -358,7 +365,7 @@ export class Color {
     if (typeof(mult) === 'undefined') mult = 1;
     if (typeof(add) === 'undefined') add = 0;
     for (let channel in this.rgba) {
-      if (this.rgba.hasOwnProperty(channel)) {
+      if (this.rgba.hasOwnProperty(channel) && channel !== 'a') {
         this.rgba[channel] = this.rgba[channel] * mult + add;
       }
     }
