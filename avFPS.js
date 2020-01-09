@@ -21,6 +21,7 @@ export default class AvFPS {
       this.textDisplay = document.createElement('DIV');
       this.canvas = document.createElement('CANVAS');
       this.div.id = 'av_fps';
+      this.div.style['z-index'] = 999;
       this.textDisplay.id = 'av_fps_textDisplay';
       this.textDisplay.display = 'block';
       this.textDisplay.style.font = (this.subHeight * 3/4) + 'px monospace';
