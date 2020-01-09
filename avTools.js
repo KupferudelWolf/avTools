@@ -209,7 +209,6 @@ export class Color {
         case 'rgb()':
           let convert = str.match(/hs/g),
               comp = str.replace(regRGBorHSL,'').split(' ');
-          console.log(comp);
           if (comp.length < 4) {
             comp.push('100%');
             while (comp.length < 4) {
