@@ -33,6 +33,13 @@ export function animate(draw, fpsTarget) {
   tick();
 };
 
+export async function asyncForEach(array, callback, complete) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+  if (complete) complete();
+}
+
 ///
 
 /**
@@ -184,7 +191,6 @@ export function randomFromArray(array) {
 
 
 /// Color functions.
-
 
 export class Color {
   constructor (r, g, b, a) {
@@ -390,17 +396,6 @@ export class Color {
   }
 
 }
-
-/*
-function hexToRgb(hex) {
-  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
-*/
 
 
 
