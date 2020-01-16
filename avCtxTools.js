@@ -116,7 +116,7 @@ export default class CtxTools {
           console.error('Graph function is invalid.');
           return;
         }
-        let fy = func(0)
+        let fy = func(0);
         this.moveTo(x, y+fy);
         for (let fx = 1; fx < length; fx++) {
           fy = func(fx);

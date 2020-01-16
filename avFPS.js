@@ -73,7 +73,7 @@ export default class AvFPS {
     let delta = this.delta,
         framerate = this.fps;
     //if (framerate >= 1000) framerate = this.target || 0;
-    this.streamMax = Math.max(this.streamMax, framerate)
+    this.streamMax = Math.max(this.streamMax, framerate);
     this.stream.push(framerate);
     while (this.stream.length > this.streamLength) {
       this.stream.shift();

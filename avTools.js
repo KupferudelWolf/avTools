@@ -31,7 +31,7 @@ export function animate(draw, fpsTarget) {
       };
 
   tick();
-};
+}
 
 export async function asyncForEach(array, callback, complete) {
   for (let index = 0; index < array.length; index++) {
@@ -58,7 +58,7 @@ export function loadJSON(url, callback) {
     }
   };
   json.send(null);
-};
+}
 
 ///
 
@@ -98,7 +98,9 @@ export function clone(obj) {
   let out = Array.isArray(obj) ? [] : {};
 
   for (let key in obj) {
-    out[key] = deepCopyFunction(obj[key]);
+    if (obj.hasOwnProperty(key)) {
+      out[key] = clone(obj[key]);
+    }
   }
 
   return out;
@@ -146,7 +148,7 @@ export function mid() {
         dist = Math.abs(ave - val);
     if (dist === 0) return val;
     if (dist < Math.abs(ave - closest)) closest = val;
-  };
+  }
   return closest;
 }
 /**
@@ -346,10 +348,10 @@ export class Color {
       a: a
     };
   }
-  get red() {return this.rgba.r}
-  get green() {return this.rgba.g}
-  get blue() {return this.rgba.b}
-  get alpha() {return this.rgba.a}
+  get red() {return this.rgba.r;}
+  get green() {return this.rgba.g;}
+  get blue() {return this.rgba.b;}
+  get alpha() {return this.rgba.a;}
 
   get luma() {
     return (this.red * 0.299 + this.green * 0.587 + this.blue * 0.114) / 255;
