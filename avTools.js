@@ -76,8 +76,20 @@ export function quotify(txt) {
  * Determines if a variable is defined.
  * @param {*} v - Variable to test.
  */
+export function isDefined(v) {
+  if(typeof(v) === 'undefined') return false;
+  if (v === null) return false;
+  if (typeof(v) === 'number' && isNaN(v)) return false;
+  return true;
+}
+/**
+ * Determines if a variable is defined.
+ * @param {*} v - Variable to test.
+ * @deprecated
+ */
 export function defined(v) {
-  return typeof(v) !== 'undefined' && v !== null;
+  console.warn('Function isDefined(*) has been deprecated. Use defined(*) instead.');
+  return isDefined(v);
 }
 /**
  * Determines if a variable matches a certain type.
@@ -86,7 +98,7 @@ export function defined(v) {
  */
 export function valid(v, type) {
   if (typeof(type) === 'string') return typeof(v) === type;
-  return defined(v);
+  return isDefined(v);
 }
 /**
  * Returns a deep copy of an object.
