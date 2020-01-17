@@ -65,6 +65,14 @@ export default class CtxTools {
         };
 
     this.func = {
+      clear: function (c) {
+        let dim = [0, 0, this.canvas.width, this.canvas.height];
+        this.clearRect(...dim);
+        if (c) {
+          this.fillStyle = c;
+          this.fillRect(...dim);
+        }
+      },
       fillPixel: function (x, y, color) {
         if (typeof(c) === 'string') {
           this.fillStyle = color;
