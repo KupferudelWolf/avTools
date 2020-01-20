@@ -1,7 +1,7 @@
 /**
  * @overview Generic tools for personal use.
  * @author Avoyt
- * @date 2020 January 3
+ * @date 2020 January 20
  * @module AV
  */
 
@@ -88,7 +88,7 @@ export function isDefined(v) {
  * @deprecated
  */
 export function defined(v) {
-  console.warn('Function isDefined(*) has been deprecated. Use defined(*) instead.');
+  console.warn('Function defined(*) has been deprecated. Use isDefined(*) instead.');
   return isDefined(v);
 }
 /**
@@ -508,7 +508,7 @@ export function angle(x1, y1, x2, y2) {
  */
 export function quicksort(array, compare) {
 	if (array.length <= 1) return array;
-  if (!defined(compare)) compare = function (a, b) {return a < b;};
+  if (!isDefined(compare)) compare = function (a, b) {return a < b;};
 
 	let left = [],
 	    right = [],
