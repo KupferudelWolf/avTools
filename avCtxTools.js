@@ -65,6 +65,7 @@ export default class CtxTools {
         };
 
     this.func = {
+      isExtended: true,
       clear: function (c) {
         let dim = [0, 0, this.canvas.width, this.canvas.height];
         this.clearRect(...dim);
