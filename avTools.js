@@ -186,13 +186,15 @@ export function round(x, y, f) {
  * @param {number} outMin - Start value of output scale.
  * @param {number} outMax - End value of output scale.
  */
-export function map(num, inMin, inMax, outMin, outMax) {
+export function map(num, inMin, inMax, outMin, outMax, isClamped) {
   if (!valid(outMax)) {
     console.error('avTools Error: Insufficient arguments for map().');
     return NaN;
   }
   if (inMax === inMin) return outMin;
-  return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+  let out = (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+  if (isClamped) out = mid(out, outMin, outMax);
+  return out;
 }
 /**
  * Returns a random value from the input array.
