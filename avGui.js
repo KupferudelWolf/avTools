@@ -79,8 +79,9 @@ export default class Gui {
 
   newSlider(name, prop) {
     prop = prop || {};
-    let func = prop.onInput || function () {},
-        funcIntern = function () {},
+    let funcIntern = function () {},
+        func = prop.onInput || function () {},
+        onRelease  = prop.onRelease || function () {},
         min = prop.min,
         max = prop.max,
         val = prop.value,
@@ -145,12 +146,19 @@ export default class Gui {
     elementSlider.min = min+'';
     elementSlider.max = max+'';
     elementSlider.value = val+'';
+    elementSlider.valuePrevious = val+'';
     elementSlider.className = 'slider';
     elementSlider.oninput = function () {
+      if (this.value === this.valuePrevious) {
+        if (obj && key) this.valuePrevious = this.value = obj[key] + '';
+        return;
+      }
       elementLabel.innerHTML = name + getValText(this.value);
       funcIntern(this.value);
       func(this.value);
+      this.valuePrevious = this.value;
     };
+    elementSlider.onchange = onRelease;
     elementLabel.innerHTML = name + getValText(val);
     elementLabel.style['padding-right'] = '2px';
     elementLabel.style['text-align'] = 'right';
