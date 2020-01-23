@@ -48,9 +48,10 @@ export default class AvFPS {
       style.innerHTML = (`/* av_Gui Stylesheet */
         #av_fps {
           position: absolute;
-          font-size: small;
+          top: 80%;
           width: ` + this.width + `px;
           height: ` + this.subHeight + `px;
+          font-size: small;
           margin: 20px;
           padding-top: ` + (this.height - this.subHeight) + `px;
           border: 2px solid white;

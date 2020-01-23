@@ -63,6 +63,21 @@ export function loadJSON(url, callback) {
 ///
 
 /**
+ * Adds trailing zeros.
+ * @param {number|String} num - Number to add zeros to.
+ * @param {number} len - Digits after the decimal point.
+ * @param {String} [sym] - Symbol to append; defaults to '0'.
+ */
+export function padDecimal(num, len, sym) {
+  if (len <= 0) return (num+'').slice(0, (num+'.').indexOf('.'));
+  sym = sym || '0';
+  num += '';
+  len += 1;
+  if (!num.includes('.')) num += '.';
+  while (num.length < num.indexOf('.') + len) num += sym + '';
+  return num.slice(0, num.indexOf('.') + len).replace(/\.$/g,'');
+}
+/**
  * Converts straight quotes to curly quotes.
  * @param {String} txt - String to "quotify".
  */
