@@ -104,7 +104,7 @@ export default class Gui {
         getValText = function (v) {
           if (!showValue) return '';
           let len = (step+'.').split('.')[1].length;//Math.log(1/(step%1 || 1)) - 2;
-          if (unit === '%') {
+          if (unit && unit.match(/^%/g)) {
             v *= 100;
             len -= 2;
           }
@@ -112,7 +112,6 @@ export default class Gui {
           if (unit) {
             if (unit === '$') {
               v = unit + v;
-              if (!step || step >= 1) step = 0.01;
             } else {
               v += unit;
             }
@@ -128,6 +127,7 @@ export default class Gui {
     if (!step) {
       // Determine step by input values' decimal places.
       let arr = [1];
+      if (unit && unit.match(/^%/g)) arr.push(0.01);
       if (val) arr.push(10 ** -(val.toString().split('.')[1] || '').length || 1);
       if (min) arr.push(10 ** -(min.toString().split('.')[1] || '').length || 1);
       if (max) arr.push(10 ** -(max.toString().split('.')[1] || '').length || 1);
