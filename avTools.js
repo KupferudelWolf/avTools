@@ -144,6 +144,15 @@ export function average() {
   return args.reduce((acc, val) => acc + val) / args.length;
 }
 /**
+ * Linear interpolation function.
+ * @param {number} a - Starting value.
+ * @param {number} b - Ending value.
+ * @param {number} t - Interpolation value, from 0 (a) to 1 (b).
+ */
+export function lerp(a, b, t) {
+  return a * (1 - t) + b * t;
+}
+/**
  * Returns the median of all numbers passed into the function. If three numbers
  * are passed, then mid() can act as a limiting function.
  * @summary Returns the median of all numbers passed into the function.
