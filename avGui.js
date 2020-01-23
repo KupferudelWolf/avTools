@@ -112,7 +112,7 @@ export default class Gui {
           if (unit) {
             if (unit === '$') {
               v = unit + v;
-              if (step >= 1) step = 0.01;
+              if (!step || step >= 1) step = 0.01;
             } else {
               v += unit;
             }
