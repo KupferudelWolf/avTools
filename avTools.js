@@ -68,7 +68,7 @@ export function loadJSON(url, callback) {
  * @param {number} len - Digits after the decimal point.
  * @param {String} [sym] - Symbol to append; defaults to '0'.
  */
-export function padDecimal(num, len, sym) {
+export function pad(num, len, sym) {
   if (len <= 0) return (num+'').slice(0, (num+'.').indexOf('.'));
   sym = sym || '0';
   num += '';
