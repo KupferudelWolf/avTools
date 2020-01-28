@@ -69,6 +69,9 @@ export function loadJSON(url, callback) {
  * @param {String} [sym] - Symbol to append; defaults to '0'.
  */
 export function pad(num, len, sym) {
+  if (!sym || sym === '0') {
+    console.warn('Deprecated function: pad(number, length). Use number.toFixed(length) instead.')
+  }
   if (len <= 0) return (num+'').slice(0, (num+'.').indexOf('.'));
   sym = sym || '0';
   num += '';
@@ -103,7 +106,7 @@ export function isDefined(v) {
  * @deprecated
  */
 export function defined(v) {
-  console.warn('Function defined(*) has been deprecated. Use isDefined(*) instead.');
+  console.warn('Deprecated function: defined(*). Use isDefined(*) instead.');
   return isDefined(v);
 }
 /**
@@ -565,7 +568,7 @@ export function quicksort(array, compare) {
  */
 Object.defineProperty(String.prototype, 'stylizeQuotes', {
   value: function () {
-    console.warn('Function String.stylizeQuotes() has been deprecated. Use quotify(String) instead.');
+    console.warn('Deprecated function: String.stylizeQuotes(). Use quotify(String) instead.');
     return quotify(this);
   },
   writable: false
@@ -578,7 +581,7 @@ Object.defineProperty(String.prototype, 'stylizeQuotes', {
  */
 Object.defineProperty(Array.prototype, 'swap', {
   value: function (a, b) {
-    console.warn('Function Array.swap() has been deprecated. Use swap(Object, a, b) instead.');
+    console.warn('Deprecated function: Array.swap(). Use swap(Object, a, b) instead.');
     let temp = this[a];
     this[a] = this[b];
     this[b] = temp;
@@ -591,7 +594,7 @@ Object.defineProperty(Array.prototype, 'swap', {
  */
 Object.defineProperty(Array.prototype, 'random', {
   value: function () {
-    console.warn('Function Array.random() has been deprecated. Use randomFromArray(Array) instead.');
+    console.warn('Deprecated function: Array.random(). Use randomFromArray(Array) instead.');
     return randomFromArray(this);
   },
   writable: false
