@@ -152,12 +152,31 @@ export default class CtxTools {
       }
       //
     };
-    if (ctx) this.extend(ctx);
+
+    if (arguments.length <= 0) return;
+    return this.extend(ctx);
+  }
+
+  parse(ctx) {
+    if (typeof(ctx) === 'string') ctx = document.getElementById(ctx);
+    if (!ctx) return console.error('CtxTools: Canvas or context not found.');
+
+    if (ctx.constructor === HTMLCanvasElement) {
+      return ctx = canvas.getContext('2d');
+    } else if (ctx.constructor === WebGLRenderingContext) {
+      return console.error('CtxTools: Could not get 2D context. Input context is WebGL.');
+    } else if (ctx.constructor !== CanvasRenderingContext2D) {
+      return console.error('CtxTools: Could not get 2D context.');
+    }
+    return ctx;
   }
 
   extend(ctx) {
+    ctx = this.parse(ctx);
+    if (!ctx) return;
     $.each(this.func, (index, value) => {
       Object.getPrototypeOf(ctx)[index] = value;
     });
+    return ctx;
   }
 }
