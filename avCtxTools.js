@@ -152,10 +152,7 @@ export default class CtxTools {
       }
       //
     };
-    if (ctx) {
-      this.extend(ctx);
-      return ctx;
-    }
+    if (ctx) return this.extend(ctx);
   }
 
   extend(ctx) {
