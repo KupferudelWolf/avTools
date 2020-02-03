@@ -152,12 +152,16 @@ export default class CtxTools {
       }
       //
     };
-    if (ctx) this.extend(ctx);
+    if (ctx) {
+      this.extend(ctx);
+      return ctx;
+    }
   }
 
   extend(ctx) {
     $.each(this.func, (index, value) => {
       Object.getPrototypeOf(ctx)[index] = value;
     });
+    return ctx;
   }
 }
