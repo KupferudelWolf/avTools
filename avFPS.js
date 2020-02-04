@@ -71,6 +71,30 @@ export default (function () {
         CTX = CANVAS.getContext('2d');
       };
 
+    style = document.getElementById('av_fps_style');
+    if (style === null) {
+      let nativeIndent = '\
+        ';
+      style = document.createElement('STYLE');
+      style.id = 'av_fps_style';
+      style.innerHTML = (`/* av_Gui Stylesheet */
+        #av_fps {
+          position: absolute;
+          top: 0%;
+          width: ` + this.width + `px;
+          height: ` + this.subHeight + `px;
+          font-size: small;
+          margin: 20px;
+          padding-top: ` + (this.height - this.subHeight) + `px;
+          border: 2px solid white;
+          color: white;
+          background-color: black;
+          opacity: 1;
+          transition: opacity 0.5s;
+        }`).replace(new RegExp(nativeIndent,'g'),'');
+      document.head.appendChild(style);
+    }
+  }
 
   return class AvFPS {
     constructor(target, prop) {
