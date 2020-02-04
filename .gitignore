@@ -1,0 +1,8 @@
+# Directories
+**/_x/
+
+# unstore DS
+**/.DS_Store
+
+# Server scripts.
+#serve*.*
