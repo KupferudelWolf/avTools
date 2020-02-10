@@ -1,7 +1,7 @@
 /**
  * @overview Generic tools for personal use.
  * @author Avoyt
- * @date 2020 January 20
+ * @date 2020 February 7
  * @module AV
  */
 
@@ -9,6 +9,12 @@
 
 export const RADIAN = Math.PI * 2;
 export const GOLDEN_RATIO = 1.61803398875;
+
+///
+
+export function randomBoolean() {
+  return Math.random() < 0.5;
+}
 
 ///
 
