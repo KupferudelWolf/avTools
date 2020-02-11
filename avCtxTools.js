@@ -1,6 +1,6 @@
 export default class CtxTools {
   constructor (ctx) {
-    let poly = function (vectors) {
+    let poly = function (ctx, vectors) {
           ctx.beginPath();
           let xK = '0', yK = '1';
           if (typeof(vectors[0].x) !== 'undefined') {
@@ -113,11 +113,11 @@ export default class CtxTools {
         this.fill();
       },
       strokePoly: function (vectors) {
-        poly(vectors);
+        poly(this, vectors);
         this.stroke();
       },
       fillPoly: function (vectors) {
-        poly(vectors);
+        poly(this, vectors);
         this.fill();
       },
       graph: function (x, y, length, func) {
