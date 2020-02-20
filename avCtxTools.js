@@ -153,6 +153,8 @@ export default class CtxTools {
       //
     };
 
+    this.func.drawLine = this.func.strokeLine;
+
     if (arguments.length <= 0) return;
     return this.extend(ctx);
   }
