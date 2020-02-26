@@ -37,11 +37,11 @@ export function animate(draw, fpsTarget) {
  * @callback arrayCallback
  * @param {*} value - Value of array at index.
  * @param {number} index
- * @param {Object[]} array
+ * @param {Array} array
  */
 /**
  * Asynchronous forEach function.
- * @param {Object[]} array - Array to enumerate.
+ * @param {Array} array - Array to enumerate.
  * @param {arrayCallback} callback - Callback for enumerated array.
  * @param {function} complete - Callback after the loop is complete.
  */
@@ -53,28 +53,17 @@ export async function asyncForEach(array, callback, complete) {
 }
 
 /**
- * Runs a list of functions asynchronously. Requires jQuery.
+ * Runs a list of functions asynchronously.
  * @summary Multiple promise function.
- * @param {...function} f - Functions to evaluate. Deferred is optional.
+ * @param {Array.<function>} array - Lists of functions to evaluate. Deferred is optional.
  * @return {Deferred}
  */
-export function promise(f) {
-  if (!$) throw 'jQuery is required.';
-  let args = [...arguments],
-      promises = [],
-      deferred = $.Deferred();
-  args.forEach((f) => {
-    let deferredFunction = $.Deferred(),
-        func = f();
-    if (func && func.promise) {
-      func.then(deferredFunction.resolve);
-    } else {
-      deferredFunction.resolve();
-    }
-    promises.push(deferredFunction.promise());
+export function deferAll(array) {
+  let promises = [];
+  array.forEach((f) => {
+    if (valid(f, 'function')) promises.push(f());
   });
-  $.when.apply($, promises).then(deferred.resolve);
-  return deferred;
+  return Promise.all(promises);
 }
 
 /**
@@ -169,10 +158,10 @@ export function clone(obj) {
 }
 /**
  * Swaps two indexes of an array or object.
- * @param {Object[]|Object} array - Array or object to swap.
+ * @param {Array|Object} array - Array or object to swap.
  * @param {number|string} a - Array index or object key to swap.
  * @param {number|string} b - Array index or object key to swap.
- * @returns {Object[]|Object}
+ * @returns {Array|Object}
  */
 export function swap(array, a, b) {
   let temp = array[a];
@@ -271,7 +260,7 @@ export function map(num, inMin, inMax, outMin, outMax, isClamped) {
 }
 /**
  * Returns a random value from the input array.
- * @param {Object[]} array
+ * @param {Array} array
  * @returns {number}
  */
 export function randomFromArray(array) {
@@ -311,9 +300,9 @@ export function angle(x1, y1, x2, y2) {
 
 /**
  * Quicksorts an array in place.
- * @param {Object[]} array - Array to sort.
+ * @param {Array.<number>} array - Array to sort.
  * @param {function} [compare] - Sorting rules.
- * @returns {Object[]}
+ * @returns {Array.<number>}
  */
 export function quicksort(array, compare) {
 	if (array.length <= 1) return array;
