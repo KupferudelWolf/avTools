@@ -1,7 +1,7 @@
 /**
  * @overview Generic tools for personal use.
  * @author Avoyt
- * @date 2020 February 7
+ * @date 2020 February 26
  * @module AV
  */
 
@@ -9,12 +9,6 @@
 
 export const RADIAN = Math.PI * 2;
 export const GOLDEN_RATIO = 1.61803398875;
-
-///
-
-export function randomBoolean() {
-  return Math.random() < 0.5;
-}
 
 ///
 
@@ -39,6 +33,18 @@ export function animate(draw, fpsTarget) {
   tick();
 }
 
+/**
+ * @callback arrayCallback
+ * @param {*} value - Value of array at index.
+ * @param {number} index
+ * @param {Object[]} array
+ */
+/**
+ * Asynchronous forEach function.
+ * @param {Object[]} array - Array to enumerate.
+ * @param {arrayCallback} callback - Callback for enumerated array.
+ * @param {function} complete - Callback after the loop is complete.
+ */
 export async function asyncForEach(array, callback, complete) {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
@@ -46,12 +52,14 @@ export async function asyncForEach(array, callback, complete) {
   if (complete) complete();
 }
 
-///
-
+/**
+ * @callback jsonCallback
+ * @param {string} responseText - JSON value.
+ */
 /**
  * Loads a JSON file through XMLHttpRequest.
- * @param {String} url - Path to JSON file.
- * @param {function} callback - Function to run when the JSON is loaded.
+ * @param {string} url - Path to JSON file.
+ * @param {jsonCallback} callback - Callback the JSON is loaded.
  */
 export function loadJSON(url, callback) {
   let json = new XMLHttpRequest();
@@ -70,9 +78,10 @@ export function loadJSON(url, callback) {
 
 /**
  * Adds trailing zeros.
- * @param {number|String} num - Number to add zeros to.
+ * @param {number|string} num - Number to add zeros to.
  * @param {number} len - Digits after the decimal point.
- * @param {String} [sym] - Symbol to append; defaults to '0'.
+ * @param {string} [sym] - Symbol to append; defaults to '0'.
+ * @returns {string}
  */
 export function pad(num, len, sym) {
   if (!sym || sym === '0') {
@@ -88,7 +97,8 @@ export function pad(num, len, sym) {
 }
 /**
  * Converts straight quotes to curly quotes.
- * @param {String} txt - String to "quotify".
+ * @param {string} txt - String to "quotify".
+ * @returns {string}
  */
 export function quotify(txt) {
   return txt.replace(/ '/g, ' \u2018')
@@ -99,6 +109,7 @@ export function quotify(txt) {
 /**
  * Determines if a variable is defined.
  * @param {*} v - Variable to test.
+ * @returns {boolean}
  */
 export function isDefined(v) {
   if(typeof(v) === 'undefined') return false;
@@ -107,18 +118,10 @@ export function isDefined(v) {
   return true;
 }
 /**
- * Determines if a variable is defined.
- * @param {*} v - Variable to test.
- * @deprecated
- */
-export function defined(v) {
-  console.warn('Deprecated function: defined(*). Use isDefined(*) instead.');
-  return isDefined(v);
-}
-/**
  * Determines if a variable matches a certain type.
  * @param {*} v - Variable to test.
- * @param {String} [type] - The exact type of variable to match.
+ * @param {string} [type] - The exact type of variable to match.
+ * @returns {boolean}
  */
 export function valid(v, type) {
   if (typeof(type) === 'string') return typeof(v) === type;
@@ -127,18 +130,16 @@ export function valid(v, type) {
 /**
  * Returns a deep copy of an object.
  * @param {Object} obj - Object to clone.
+ * @returns {Object}
  */
 export function clone(obj) {
   if (typeof obj !== "object" || obj === null) return obj;
-
   let out = Array.isArray(obj) ? [] : {};
-
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
       out[key] = clone(obj[key]);
     }
   }
-
   return out;
 }
 /**
@@ -146,6 +147,7 @@ export function clone(obj) {
  * @param {Object[]|Object} array - Array or object to swap.
  * @param {number|string} a - Array index or object key to swap.
  * @param {number|string} b - Array index or object key to swap.
+ * @returns {Object[]|Object}
  */
 export function swap(array, a, b) {
   let temp = array[a];
@@ -159,8 +161,16 @@ export function swap(array, a, b) {
 /// Mathematical functions.
 
 /**
+ * Returns a boolean value: either "true" or "false".
+ * @returns {boolean}
+ */
+export function randomBoolean() {
+  return Math.random() < 0.5;
+}
+/**
  * Returns the average of all numbers passed into the function.
  * @param {...number}
+ * @returns {number}
  */
 export function average() {
   let args = [];
@@ -172,6 +182,7 @@ export function average() {
  * @param {number} a - Starting value.
  * @param {number} b - Ending value.
  * @param {number} t - Interpolation value, from 0 (a) to 1 (b).
+ * @returns {number}
  */
 export function lerp(a, b, t) {
   return a * (1 - t) + b * t;
@@ -181,6 +192,7 @@ export function lerp(a, b, t) {
  * are passed, then mid() can act as a limiting function.
  * @summary Returns the median of all numbers passed into the function.
  * @param {...number}
+ * @returns {number}
  */
 export function mid() {
   let args = [], sum, l, ave, closest;
@@ -202,6 +214,7 @@ export function mid() {
  * @param {number} x - Number to round.
  * @param {number} [y] - Number to round to.
  * @param {number} [f] - Math function to use. Defaults to 'floor'.
+ * @returns {number}
  */
 export function round(x, y, f) {
   y = y || 1;
@@ -218,6 +231,8 @@ export function round(x, y, f) {
  * @param {number} inMax - End value of input scale.
  * @param {number} outMin - Start value of output scale.
  * @param {number} outMax - End value of output scale.
+ * @param {boolean} isClamped - If true, value will clamp between outMin and outMax.
+ * @returns {number}
  */
 export function map(num, inMin, inMax, outMin, outMax, isClamped) {
   if (!valid(outMax)) {
@@ -232,6 +247,7 @@ export function map(num, inMin, inMax, outMin, outMax, isClamped) {
 /**
  * Returns a random value from the input array.
  * @param {Object[]} array
+ * @returns {number}
  */
 export function randomFromArray(array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -239,276 +255,7 @@ export function randomFromArray(array) {
 
 
 
-/// Color functions.
-
-export class Color {
-  constructor (r, g, b, a) {
-    if (r instanceof Color) {
-      let obj = r;
-      r = obj.red;
-      g = obj.green;
-      b = obj.blue;
-      if (obj.alpha) a = obj.alpha;
-    } else if (typeof(r) === 'object') {
-      let obj = r;
-      if (valid(obj.r)) {
-        r = obj.r;
-        g = obj.g;
-        b = obj.b;
-        if (obj.a) a = obj.a;
-      }
-    }
-    if (typeof(r) === 'string') {
-      let mode, str = r.trim().replace(/,\s*/g,' '),
-          regRGBorHSL = new RegExp('(rgba?|hs[blv]a?)\\(|\\)','g');
-
-      if (r.match(/x|#/g)) {
-        mode = 'hex';
-      } else if (r.match(regRGBorHSL)) {
-        mode = 'rgb()';
-      }
-
-      switch (mode) {
-        case 'rgb()':
-          let convert = str.match(/hs/g),
-              comp = str.replace(regRGBorHSL,'').split(' ');
-          if (comp.length < 4) {
-            comp.push('100%');
-            while (comp.length < 4) {
-              comp.unshift('0');
-            }
-          }
-          if (convert) {
-            let isHSV = !str.match(/hsl/g),
-                h = comp[0]+'',
-                s = parseFloat(comp[1]),
-                l = parseFloat(comp[2]),
-                c, x, m;
-
-            if (h.match(/%/)) h = parseFloat(comp[0]) * 3.60;
-
-            if (isHSV) {
-              let v = l,
-                  hue = (2-s)*v;
-              s = s*v/(hue<1 ? hue : 2-hue);
-              h *= 360;
-              l = hue / 2;
-            } else {
-              s /= 100;
-              l /= 100;
-            }
-
-            if (s === 0) {
-              r = g = b = comp[2];
-            } else {
-              h += '';
-              if (h.match(/rad/g)) {
-                h = Math.round(parseInt(h) * (180 / Math.PI));
-              } else if (h.match(/turn/g)) {
-                h = Math.round(parseInt(h) * 360);
-              } else {
-                h = parseInt(h);
-              }
-              h %= 360;
-
-              c = (1 - Math.abs(2 * l - 1)) * s;
-              x = c * (1 - Math.abs((h / 60) % 2 - 1));
-              m = l - c/2;
-              /*
-              if (0 <= h && h < 60) {
-                r = c; g = x; b = 0;
-              } else if (60 <= h && h < 120) {
-                r = x; g = c; b = 0;
-              } else if (120 <= h && h < 180) {
-                r = 0; g = c; b = x;
-              } else if (180 <= h && h < 240) {
-                r = 0; g = x; b = c;
-              } else if (240 <= h && h < 300) {
-                r = x; g = 0; b = c;
-              } else if (300 <= h && h < 360) {
-                r = c; g = 0; b = x;
-              }
-              */
-              switch (Math.floor(h / 60)) {
-                case 0: r = c; g = x; b = 0; break;
-                case 1: r = x; g = c; b = 0; break;
-                case 2: r = 0; g = c; b = x; break;
-                case 3: r = 0; g = x; b = c; break;
-                case 4: r = x; g = 0; b = c; break;
-                case 5: r = c; g = 0; b = x; break;
-              }
-              r = Math.round((r + m) * 255);
-              g = Math.round((g + m) * 255);
-              b = Math.round((b + m) * 255);
-              a = 2.55 * parseInt(comp[3]);
-            }
-          } else {
-            comp.forEach((value, index, array) => {
-              if (value.match(/%/g)) array[index] = 2.55 * parseFloat(value);
-            });
-            r = Math.round(parseFloat(comp[0]));
-            g = Math.round(parseFloat(comp[1]));
-            b = Math.round(parseFloat(comp[2]));
-            a = Math.round(parseFloat(comp[3]));
-          }
-
-          break;
-        case 'hex':
-          str = r.replace(/0x|#/g,'').toLowerCase();
-          switch (str.length) {
-            case 3:
-              str = str[0] + str[0] + str[1] + str[1] + str[2] + str[2] + 'ff';
-              break;
-            case 4:
-              str = str[0] + str[0] + str[1] + str[1] + str[2] + str[2] + str[3] + str[3];
-              break;
-            case 6:
-              str += 'ff';
-              break;
-            default:
-              while (str.length < 6) {
-                str = '0' + str;
-              }
-              break;
-          }
-          r = parseInt(str.slice(0,2), 16);
-          g = parseInt(str.slice(2,4), 16);
-          b = parseInt(str.slice(4,6), 16);
-          a = parseInt(str.slice(6,8), 16);
-          break;
-      }
-    } else {
-      if (r+g+b > 0 && r <= 1 && g <= 1 && b <= 1 && (typeof(a) === 'undefined' || a <= 1)) {
-        r *= 255;
-        g *= 255;
-        b *= 255;
-        if (typeof(a) !== 'undefined') a *= 255;
-      }
-    }
-
-    if (typeof(a) === 'undefined') a = 255;
-
-    this.rgba = {
-      r: r,
-      g: g,
-      b: b,
-      a: a
-    };
-  }
-  get red() {return this.rgba.r;}
-  get green() {return this.rgba.g;}
-  get blue() {return this.rgba.b;}
-  get alpha() {return this.rgba.a;}
-
-  get luma() {
-    return (this.red * 0.299 + this.green * 0.587 + this.blue * 0.114) / 255;
-  }
-  get value() {
-    return Math.floor((this.red << 16) + (this.green << 8) + (this.blue));
-  }
-  get hex() {
-    return '#' + ('000000' + this.value.toString(16)).slice(-6);
-  }
-  get hexA() {
-    return this.hex + ('00' + Math.floor(this.alpha).toString(16)).slice(-2);
-  }
-  get rgb() {
-    return 'rgb(' + this.red + ' ' + this.green + ' ' + this.blue + ')';
-  }
-  get rgbPerc() {
-    return 'rgb(' + (100*this.red/255) + '% '
-                  + (100*this.green/255) + '% '
-                  + (100*this.blue/255) + '%)';
-  }
-
-  math(mult, add) {
-    if (typeof(mult) === 'undefined') mult = 1;
-    if (typeof(add) === 'undefined') add = 0;
-    for (let channel in this.rgba) {
-      if (this.rgba.hasOwnProperty(channel) && channel !== 'a') {
-        this.rgba[channel] = this.rgba[channel] * mult + add;
-      }
-    }
-    return this;
-  }
-  add(x) {
-    return this.math(1,x);
-  }
-  sub(x) {
-    return this.math(1,-x);
-  }
-  mult(x) {
-    return this.math(x);
-  }
-  div(x) {
-    return this.math(1/x);
-  }
-
-}
-
-
-
 /// Cartesian functions.
-
-/**
- * Cartesian point.
- * @class Point
- * @type {Object}
- * @property {number} x - X coordinate.
- * @property {number} y - Y coordinate.
- */
-export class Point {
-  /**
-   * @constructs Point
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
-   */
-  constructor (x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  /**
-   * Moves the Point by a distance in a certain direction.
-   * @memberof Point#
-   * @param {number} ang - Direction to move the point (in radians).
-   * @param {number} dist - Distance to move the point.
-   */
-  applyAngle(ang, dist) {
-    this.x += dist * Math.cos(ang);
-    this.y += dist * Math.sin(ang);
-    return this;
-  }
-  /**
-   * Returns the distance between this Point and another Cartesian point.
-   * @memberof Point#
-   * @param {number|Point|Object} x - X coordinate, Point object, or object
-   * containing X and Y coordinates.
-   * @param {number} [y] - Y coordinate. Ignored if x is not a number.
-   * @returns {number}
-   */
-  distanceTo(x, y) {
-    if (x instanceof Point || (valid(x.x) && valid(x.y))) {
-      y = x.y;
-      x = x.x;
-    }
-    return Math.sqrt(Math.pow((y-this.y),2) + Math.pow((x-this.x),2));
-  }
-  /**
-   * Returns the angle between this Point and another Cartesian point.
-   * @memberof Point#
-   * @param {number|Point|Object} x - X coordinate, Point object, or object
-   * containing X and Y coordinates.
-   * @param {number} [y] - Y coordinate. Ignored if x is not a number.
-   * @returns {number} Angle (in radians).
-   */
-  angleTo(x, y) {
-    if (x instanceof Point || (valid(x.x) && valid(x.y))) {
-      y = x.y;
-      x = x.x;
-    }
-    return Math.atan2(y - this.y, x - this.x);
-  }
-}
 
 /**
  * Returns the distance between two Cartesian points.
@@ -516,6 +263,7 @@ export class Point {
  * @param {number} y1 - Y value of the first coordinate.
  * @param {number} x2 - X value of the second coordinate.
  * @param {number} y2 - Y value of the second coordinate.
+ * @returns {number}
  */
 export function distance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow((y2-y1),2) + Math.pow((x2-x1),2));
@@ -540,6 +288,7 @@ export function angle(x1, y1, x2, y2) {
  * Quicksorts an array in place.
  * @param {Object[]} array - Array to sort.
  * @param {function} [compare] - Sorting rules.
+ * @returns {Object[]}
  */
 export function quicksort(array, compare) {
 	if (array.length <= 1) return array;
@@ -564,44 +313,3 @@ export function quicksort(array, compare) {
 
 	return array;
 }
-
-
-/// Extended properties. May deprecate.
-
-/**
- * Converts straight quotes to curly quotes.
- * @deprecated
- */
-Object.defineProperty(String.prototype, 'stylizeQuotes', {
-  value: function () {
-    console.warn('Deprecated function: String.stylizeQuotes(). Use quotify(String) instead.');
-    return quotify(this);
-  },
-  writable: false
-});
-/**
- * Swaps two indexes of an array.
- * @param {number} a - Array index to swap.
- * @param {number} b - Array index to swap.
- * @deprecated
- */
-Object.defineProperty(Array.prototype, 'swap', {
-  value: function (a, b) {
-    console.warn('Deprecated function: Array.swap(). Use swap(Object, a, b) instead.');
-    let temp = this[a];
-    this[a] = this[b];
-    this[b] = temp;
-  },
-  writable: false
-});
-/**
- * Returns a random value from the array.
- * @deprecated
- */
-Object.defineProperty(Array.prototype, 'random', {
-  value: function () {
-    console.warn('Deprecated function: Array.random(). Use randomFromArray(Array) instead.');
-    return randomFromArray(this);
-  },
-  writable: false
-});
