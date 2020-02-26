@@ -53,6 +53,31 @@ export async function asyncForEach(array, callback, complete) {
 }
 
 /**
+ * Runs a list of functions asynchronously. Requires jQuery.
+ * @summary Multiple promise function.
+ * @param {...function} f - Functions to evaluate. Deferred is optional.
+ * @return {Deferred}
+ */
+export function promise(f) {
+  if (!$) throw 'jQuery is required.';
+  let args = [...arguments],
+      promises = [],
+      deferred = $.Deferred();
+  args.forEach((f) => {
+    let deferredFunction = $.Deferred(),
+        func = f();
+    if (func && func.promise) {
+      func.then(deferredFunction.resolve);
+    } else {
+      deferredFunction.resolve();
+    }
+    promises.push(deferredFunction.promise());
+  });
+  $.when.apply($, promises).then(deferred.resolve);
+  return deferred;
+}
+
+/**
  * @callback jsonCallback
  * @param {string} responseText - JSON value.
  */
