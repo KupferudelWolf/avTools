@@ -12,25 +12,38 @@ export const GOLDEN_RATIO = 1.61803398875;
 
 ///
 
+class Animator {
+  constructor (draw, fpsTarget) {
+    this.draw = draw;
+    this.interval = 1000 / (fpsTarget || 60);
+    this.running = true;
+    this.time = Date.now();
+
+    this.tick();
+  }
+
+  stop() {
+    this.running = false;
+  }
+
+  tick() {
+    // console.log(a);
+    if (!this.running) return;
+    requestAnimationFrame(function () {app.tick();});
+    let app = this, delta, now;
+    if ((delta = (now = Date.now()) - this.time) >= this.interval) {
+      this.time = now - (delta % this.interval);
+      this.draw(this);
+    }
+  }
+}
 /**
  * Runs a function every set number of frames.
  * @param {function} draw - Function to run.
  * @param {number} [fpsTarget] - Frame rate (in fps).
  */
 export function animate(draw, fpsTarget) {
-
-  let delta, now,
-      then = Date.now(),
-      interval = 1000 / (fpsTarget || 1000),
-      tick = function () {
-        requestAnimationFrame(tick);
-        if ((delta = (now = Date.now()) - then) >= interval) {
-          then = now - (delta % interval);
-          draw();
-        }
-      };
-
-  tick();
+  return new Animator(draw, fpsTarget);
 }
 
 /**
